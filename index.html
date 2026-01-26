@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJGT752QMP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-DJGT752QMP');
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📈 Pavlo’s Stock Recommendations Tracker</title>
+  <style>
+    :root {
+      --primary-color: #2E7D32;
+      --primary-light: #4CAF50;
+      --secondary-color: #1565C0;
+      --secondary-light: #2196F3;
+      --background-light: #f8fafc;
+      --background-dark: #e8edf2;
+      --text-color: #2d3748;
+      --text-light: #4a5568;
+      --border-color: #e2e8f0;
+      --shadow-light: rgba(0, 0, 0, 0.05);
+      --shadow-medium: rgba(0, 0, 0, 0.1);
+      --error-color: #D32F2F;
+      --success-color: #388E3C;
+      --warning-color: #F57C00;
+      --card-radius: 12px;
+      --transition: all 0.2s ease-in-out;
+      --dark-grey: #616161;
+      --dark-grey-hover: #424242;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--background-light);
+      color: var(--text-color);
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 25px 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .header-content {
+      text-align: center;
+      flex-grow: 1;
+      padding-right: 20px;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 10px;
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+
+    .header-button {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      background-color: var(--dark-grey);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-button:hover {
+      background-color: var(--dark-grey-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    }
+
+    main.wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 18px;
+      border-radius: var(--card-radius);
+      box-shadow: 0 2px 4px var(--shadow-medium);
+    }
+
+    h1 {
+      margin-top: 0;
+      color: white;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--text-color);
+    }
+
+    .info-text {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+
+    .stocks-table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      background-color: var(--background-dark);
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    tr:hover {
+      background-color: #f1f5f9;
+    }
+
+    .rating-strong-buy {
+      color: var(--success-color);
+      font-weight: 700;
+    }
+
+    .rating-buy {
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    .rating-not-rec {
+      color: var(--error-color);
+      font-weight: 700;
+    }
+
+    .positive {
+      color: var(--success-color);
+      font-weight: 600;
+    }
+
+    .negative {
+      color: var(--error-color);
+      font-weight: 600;
+    }
+
+    .neutral {
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background-color: var(--background-dark);
+      color: var(--text-light);
+    }
+
+    .status-loading {
+      background-color: #fff8e1;
+      color: #e65100;
+    }
+
+    .status-error {
+      background-color: #ffebee;
+      color: var(--error-color);
+    }
+
+    .status-ok {
+      background-color: #e8f5e9;
+      color: var(--success-color);
+    }
+
+    .last-updated {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    .add-note {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-top: 6px;
+    }
+
+    .small-link {
+      font-size: 0.8rem;
+    }
+
+    footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 25px 30px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      flex-wrap: wrap;
+      position: relative;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 15px;
+      }
+
+      .header-buttons {
+        position: static;
+        display: flex;
+        width: 100%;
+        margin-top: 15px;
+        justify-content: center;
+      }
+
+      .header-button {
+        width: 48%;
+      }
+
+      main.wrap {
+        padding: 15px;
+      }
+
+      table {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>📈 Stock Recommendations Performance</h1>
+      <p class="info-text">
+        Live tracker of my YouTube stock calls: initial price vs current price, performance in %, and days since publication.
+      </p>
+    </div>
+    <div class="header-buttons">
+      <button class="header-button" onclick="location.href='https://www.youtube.com'">
+        YouTube Channel
+      </button>
+      <button class="header-button" onclick="location.href='index.html'">
+        Checklist Page
+      </button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>My tracked recommendations</h2>
+      <p class="info-text">
+        To add a new stock, edit the <code>stocks</code> array in the JavaScript section of this file:
+        set ticker, video link, initial price, rating, and video publication date.
+      </p>
+      <p class="add-note">
+        Ratings used: <strong>Strong Buy</strong>, <strong>Buy</strong>, <strong>Not Recommended</strong>.
+      </p>
+
+      <div class="stocks-table-wrapper">
+        <table id="stocksTable">
+          <thead>
+            <tr>
+              <th>Ticker</th>
+              <th>Video</th>
+              <th>Rating</th>
+              <th>Initial price</th>
+              <th>Current price</th>
+              <th>Change %</th>
+              <th>Days since video</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Filled by JS -->
+          </tbody>
+        </table>
+      </div>
+      <div class="last-updated" id="lastUpdated"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div>Built for transparent tracking of my stock ideas over time.</div>
+  </footer>
+
+  <script>
+    // ==========================
+    // CONFIG
+    // ==========================
+    const API_KEY = "d0kuab9r01qhb02558rgd0kuab9r01qhb02558s0"; // <-- put your Finnhub API key here
+    const FINNHUB_URL = "https://finnhub.io/api/v1/quote";
+
+    // ==========================
+    // DATA: ADD / EDIT HERE
+    // ==========================
+    // rating: "Strong Buy" | "Buy" | "Not Recommended"
+    // date format: "YYYY-MM-DD"
+    const stocks = [
+      // EXAMPLES — replace with your real calls
+      {
+        ticker: "AAPL",
+        videoUrl: "https://www.youtube.com/watch?v=EXAMPLE1",
+        initialPrice: 190.50,
+        rating: "Strong Buy",
+        videoDate: "2024-09-01"
+      },
+      {
+        ticker: "AMZN",
+        videoUrl: "https://www.youtube.com/watch?v=EXAMPLE2",
+        initialPrice: 130.20,
+        rating: "Buy",
+        videoDate: "2024-08-15"
+      },
+      {
+        ticker: "TSLA",
+        videoUrl: "https://www.youtube.com/watch?v=EXAMPLE3",
+        initialPrice: 250.00,
+        rating: "Not Recommended",
+        videoDate: "2024-07-10"
+      }
+    ];
+
+    // ==========================
+    // HELPERS
+    // ==========================
+    function daysSince(dateStr) {
+      const start = new Date(dateStr + "T00:00:00");
+      const now = new Date();
+      const diffMs = now - start;
+      return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    }
+
+    function formatNumber(num, decimals = 2) {
+      if (num === null || num === undefined || isNaN(num)) return "-";
+      return num.toFixed(decimals);
+    }
+
+    function ratingClass(rating) {
+      const r = rating.toLowerCase();
+      if (r.includes("strong")) return "rating-strong-buy";
+      if (r === "buy") return "rating-buy";
+      return "rating-not-rec";
+    }
+
+    function changeClass(value) {
+      if (value > 0) return "positive";
+      if (value < 0) return "negative";
+      return "neutral";
+    }
+
+    // ==========================
+    // RENDER
+    // ==========================
+    async function fetchCurrentPrice(ticker) {
+      const url = `${FINNHUB_URL}?symbol=${encodeURIComponent(ticker)}&token=${API_KEY}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error("HTTP " + res.status);
+      }
+      const data = await res.json();
+      // Finnhub: c = current price
+      if (typeof data.c !== "number" || data.c === 0) {
+        throw new Error("No valid price");
+      }
+      return data.c;
+    }
+
+    async function renderTable() {
+      const tbody = document.querySelector("#stocksTable tbody");
+      tbody.innerHTML = "";
+
+      const now = new Date();
+      document.getElementById("lastUpdated").textContent =
+        "Last updated: " + now.toLocaleString();
+
+      for (const stock of stocks) {
+        const tr = document.createElement("tr");
+
+        const days = daysSince(stock.videoDate);
+
+        // base cells
+        const tdTicker = document.createElement("td");
+        tdTicker.textContent = stock.ticker;
+
+        const tdVideo = document.createElement("td");
+        const link = document.createElement("a");
+        link.href = stock.videoUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "Video";
+        link.className = "small-link";
+        tdVideo.appendChild(link);
+
+        const tdRating = document.createElement("td");
+        tdRating.textContent = stock.rating;
+        tdRating.className = ratingClass(stock.rating);
+
+        const tdInitial = document.createElement("td");
+        tdInitial.textContent = "$" + formatNumber(stock.initialPrice);
+
+        const tdCurrent = document.createElement("td");
+        tdCurrent.innerHTML = '<span class="status-badge status-loading">Loading…</span>';
+
+        const tdChange = document.createElement("td");
+        tdChange.textContent = "-";
+
+        const tdDays = document.createElement("td");
+        tdDays.textContent = days;
+
+        const tdStatus = document.createElement("td");
+        tdStatus.innerHTML = '<span class="status-badge status-loading">Fetching</span>';
+
+        tr.appendChild(tdTicker);
+        tr.appendChild(tdVideo);
+        tr.appendChild(tdRating);
+        tr.appendChild(tdInitial);
+        tr.appendChild(tdCurrent);
+        tr.appendChild(tdChange);
+        tr.appendChild(tdDays);
+        tr.appendChild(tdStatus);
+
+        tbody.appendChild(tr);
+
+        // async fetch price
+        try {
+          const currentPrice = await fetchCurrentPrice(stock.ticker);
+          const changePct = ((currentPrice - stock.initialPrice) / stock.initialPrice) * 100;
+
+          tdCurrent.textContent = "$" + formatNumber(currentPrice);
+          tdChange.textContent = formatNumber(changePct) + " %";
+          tdChange.className = changeClass(changePct);
+
+          tdStatus.innerHTML = '<span class="status-badge status-ok">OK</span>';
+        } catch (err) {
+          tdCurrent.textContent = "-";
+          tdChange.textContent = "-";
+          tdStatus.innerHTML = '<span class="status-badge status-error">Error</span>';
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", renderTable);
+  </script>
+</body>
+</html>
