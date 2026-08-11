@@ -755,6 +755,12 @@
     const defaultCopyIconHtml = `<svg class="copy-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
     const successCheckIconHtml = `<span style="font-size: 11px; line-height: 14px; display: inline-block;">✅</span>`;
 
+  const PROMPTS = {
+        demand: "Analyze the future demand potential and growth catalysts for the stock, including market trends, technological shifts, and TAM expansion. Double check potential disruptors or risks to this demand growth. Do a deep-dive professional analysis in Russian language. My next message will be the ticker or company name. Answer me with \"Какую акцию нужно анализировать?\" and proceed after my reply.",
+        risk: "Analyze all the bear thesis for the stock double check if those thesis are relevant and give the probability of that thesis happening together with counter-argument why it might not happen, do deep-dive professional analysis, answer in Russian language, my next message to you will be the ticker or the name of the company on which I want you to make analysis, answer me with \"Какую акцию нужно анализировать?\" and after reviving my second message start to do that high level professional analysis",
+        management: "Analyze company management team, founder involvement, insider ownership, tenure, track record, and independent auditors. Do a deep-dive professional analysis in Russian language. My next message will be the ticker or company name. Answer me with \"Какую акцию нужно анализировать?\" and proceed after my reply."
+    };
+
     const translations = {
         en: {
             title: "Stock Analysis Checklist",
